@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fraxible-v3';
+const CACHE_NAME = 'Teinco-v3';
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -21,7 +21,7 @@ self.addEventListener('push', function(event) {
   const data = event.data.json();
   
   const options = {
-    body: data.body || 'Nueva actividad en Fraxible',
+    body: data.body || 'Nueva actividad en Teinco curtido',
     icon: 'img/icon (2).png',
     badge: 'img/icon-192.png',
     vibrate: [200, 100, 200],
@@ -31,7 +31,7 @@ self.addEventListener('push', function(event) {
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Fraxible', options)
+    self.registration.showNotification(data.title || 'Teinco', options)
   );
 });
 
