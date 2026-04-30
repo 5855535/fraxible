@@ -4,99 +4,89 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fraxible Full Cheek</title>
-
   <!-- === PWA CONFIGURACIÓN === -->
+   <link rel="icon" type="image/png" href="img/icon (2).png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <meta name="background-color" content="#000000">
-  
-  <!-- Soporte para iOS -->
+ 
+  <!-- iOS y Android -->
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Fraxible">
   <link rel="apple-touch-icon" href="img/icon (2).png">
+  <link rel="icon" href="img/icon (2).png" type="image/png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script> <!-- ← Notificaciones -->
-
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
+ 
   <style>
     :root {
       --x-pink: #a40060;
       --x-black: #000000;
       --x-border: #2f3336;
     }
-
     *::-webkit-scrollbar { display: none !important; }
     * { -ms-overflow-style: none !important; scrollbar-width: none !important; }
-
-    body { 
+    body {
       background-color: var(--x-black);
       color: #e7e9ea;
       font-family: 'Inter', sans-serif;
     }
-
     #app-container { opacity: 0; transition: opacity 0.3s ease; }
     #app-container.visible { opacity: 1; }
-
     .x-input {
       background: var(--x-black) !important;
       border: 1px solid var(--x-border) !important;
       color: white !important;
     }
-
     .x-input:focus { border-color: var(--x-pink) !important; outline: none; }
-
     .btn-blue {
       background-color: var(--x-pink);
       color: white;
       font-weight: 700;
       transition: opacity 0.2s;
     }
-
     .btn-blue:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-blue:hover:not(:disabled) { opacity: 0.9; }
-    
+   
     .mention, .hashtag { color: var(--x-pink); cursor: pointer; }
     .mention:hover, .hashtag:hover { text-decoration: underline; }
-
     .thread-card {
       border-bottom: 1px solid var(--x-border);
       transition: background 0.2s;
       overflow: hidden;
     }
     .thread-card:hover { background-color: rgba(255,255,255,0.02); }
-
     @keyframes pulse { 50% { opacity: .5; } }
     .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   </style>
 </head>
 <body>
-
   <!-- Contenedor maestro -->
   <div id="app-container">
-    
+   
     <nav class="border-b border-[#2f3336] sticky top-0 bg-black/80 backdrop-blur-md z-50">
       <div class="max-w-2xl mx-auto px-4 py-3 flex justify-between items-center">
         <h1 class="text-xl font-bold flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
-          <img src="img/icon (2).png" alt="Logo" class="w-8 h-8 object-contain"> 
+          <img src="img/icon (2).png" alt="Logo" class="w-8 h-8 object-contain">
           Fraxible
         </h1>
         <div id="nav-user"></div>
       </div>
     </nav>
-
     <div class="max-w-2xl mx-auto min-h-screen border-x border-[#2f3336]">
-      
+     
       <!-- Pantalla de Auth -->
       <div id="auth-screen" class="hidden p-10 text-center flex flex-col items-center justify-center min-h-[80vh]">
         <img src="img/icon (2).png" alt="Logo" class="w-24 h-24 mb-8 object-contain">
-        
+       
         <div id="login-container" class="space-y-4 w-full max-w-xs">
           <h2 class="text-3xl font-bold mb-10 tracking-tight">Inicia Sesion</h2>
           <input id="email" type="email" placeholder="Correo electrónico" class="w-full p-3 rounded x-input"/>
@@ -105,7 +95,6 @@
           <p id="login-error" class="text-red-500 text-xs mt-2 hidden"></p>
           <p class="text-sm text-zinc-500">¿No tienes cuenta? <button onclick="toggleAuth(true)" class="text-pink-400 font-bold">Regístrate</button></p>
         </div>
-
         <div id="register-container" class="hidden space-y-4 w-full max-w-xs">
           <h2 class="text-2xl font-bold mb-6">Crear cuenta</h2>
           <input id="reg-username" type="text" placeholder="Nombre de usuario" class="w-full p-3 rounded x-input"/>
@@ -116,7 +105,6 @@
           <p class="text-sm text-zinc-500">¿Ya tienes cuenta? <button onclick="toggleAuth(false)" class="text-pink-400 font-bold">Inicia sesión</button></p>
         </div>
       </div>
-
       <!-- App Principal -->
       <div id="main-app" class="hidden">
         <div class="p-4 border-b border-[#2f3336]">
@@ -125,10 +113,10 @@
               <i class="fas fa-user"></i>
             </div>
             <div class="flex-1">
-              <textarea id="thread-content" rows="1" placeholder="¿Qué está pasando?" 
+              <textarea id="thread-content" rows="1" placeholder="¿Qué está pasando?"
                         maxlength="280"
                         class="w-full bg-transparent border-none text-xl focus:outline-none resize-none overflow-hidden"></textarea>
-              
+             
               <div class="flex justify-between items-center pt-3 border-t border-[#2f3336] mt-2">
                 <div id="char-counter" class="text-[10px] font-bold text-zinc-600">0 / 280</div>
                 <button id="btn-post" onclick="createThread()" class="btn-blue px-5 py-1.5 rounded-full text-sm">Postear</button>
@@ -136,7 +124,6 @@
             </div>
           </div>
         </div>
-
         <div id="skeletons" class="hidden">
           <div class="p-4 border-b border-[#2f3336] animate-pulse">
               <div class="flex gap-3">
@@ -149,7 +136,6 @@
               </div>
           </div>
         </div>
-
         <div id="threads-list"></div>
       </div>
     </div>
@@ -166,8 +152,8 @@
     </div>
   </div>
 
-  <!-- Botón de Instalar App -->
-  <button id="install-btn" class="hidden fixed bottom-6 right-6 bg-[#a40060] hover:bg-[#8c0050] text-white px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 z-[100] transition-all active:scale-95">
+  <!-- Botón Instalar -->
+  <button id="install-btn" class="hidden fixed bottom-6 right-6 bg-[#a40060] hover:bg-[#8c0050] text-white px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 z-[100]">
     <i class="fas fa-download"></i>
     <span class="font-semibold">Instalar Fraxible</span>
   </button>
@@ -181,23 +167,20 @@
       messagingSenderId: "357048503802",
       appId: "1:357048503802:web:ed208576020c6a52942843"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const messaging = firebase.messaging();   // ← Notificaciones
+    const messaging = firebase.messaging();
 
     let currentUser = null;
     let userData = null;
     let deferredPrompt = null;
 
-    // ==================== PWA ====================
+    // PWA
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(() => console.log('✅ Service Worker registrado'))
-          .catch(err => console.error('SW Error:', err));
-      });
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('✅ Service Worker registrado'))
+        .catch(err => console.error(err));
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -206,98 +189,100 @@
     });
 
     document.getElementById('install-btn').addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          document.getElementById('install-btn').classList.add('hidden');
-          deferredPrompt = null;
-        });
-      }
+      deferredPrompt?.prompt();
     });
 
-    // ==================== NOTIFICACIONES PUSH ====================
+    // Notificaciones
     async function requestNotificationPermission() {
       try {
+        if (Notification.permission === 'granted') return;
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-          const token = await messaging.getToken({
-            vapidKey: "okhphbHSkIE0P-ps0Sm0xArwtxoI2NpnQzKhl7Ruy-M"
-          });
-          
-          if (currentUser) {
-            await db.collection('users').doc(currentUser.uid).update({
-              fcmToken: token,
-              notificationsEnabled: true
-            });
-          }
-          console.log('✅ Notificaciones activadas');
+          const token = await messaging.getToken({ vapidKey: "okhphbHSkIE0P-ps0Sm0xArwtxoI2NpnQzKhl7Ruy-M" });
+          if (currentUser) await db.collection('users').doc(currentUser.uid).update({ fcmToken: token });
         }
-      } catch (err) {
-        console.error('Error en notificaciones:', err);
-      }
+      } catch (err) { console.error(err); }
     }
 
-    // Notificación cuando la app está abierta
     messaging.onMessage((payload) => {
       new Notification(payload.notification?.title || "Fraxible", {
-        body: payload.notification?.body || "Nueva actividad",
+        body: payload.notification?.body || "",
         icon: "img/icon (2).png"
       });
     });
 
-    // ==================== Resto de funciones ====================
+    // ==================== FUNCIONES ====================
     function formatText(text) {
       if(!text) return "";
-      return text
-        .replace(/@(\w+)/g, '<span class="mention">@$1</span>')
-        .replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
+      return text.replace(/@(\w+)/g, '<span class="mention">@$1</span>')
+                 .replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
     }
 
     const threadInput = document.getElementById('thread-content');
     const counter = document.getElementById('char-counter');
 
     threadInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-        const length = this.value.length;
-        counter.innerText = `${length} / 280`;
-        if(length >= 250) counter.style.color = '#f91880';
-        else if(length >= 200) counter.style.color = '#ffd700';
-        else counter.style.color = '#536471';
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+      const length = this.value.length;
+      counter.innerText = `${length} / 280`;
+      counter.style.color = length >= 250 ? '#f91880' : length >= 200 ? '#ffd700' : '#536471';
     });
 
     function toggleAuth(showRegister) {
-        document.getElementById('login-container').classList.toggle('hidden', showRegister);
-        document.getElementById('register-container').classList.toggle('hidden', !showRegister);
+      document.getElementById('login-container').classList.toggle('hidden', showRegister);
+      document.getElementById('register-container').classList.toggle('hidden', !showRegister);
     }
 
     function showError(elementId, message) {
-        const errEl = document.getElementById(elementId);
-        errEl.innerText = message;
-        errEl.classList.remove('hidden');
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.classList.remove('hidden');
     }
 
     async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      try { await auth.signInWithEmailAndPassword(email, password); } catch(e) { showError('login-error', "Credenciales incorrectas."); }
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch(e) {
+        showError('login-error', "Credenciales incorrectas");
+      }
     }
 
+    // Registro mejorado
     async function handleRegister() {
-        const username = document.getElementById('reg-username').value.trim().toLowerCase();
-        const email = document.getElementById('reg-email').value.trim();
-        const password = document.getElementById('reg-password').value;
-        if(!username || !email || !password) return showError('reg-error', "Llena todos los campos.");
-        try {
-            const snapshot = await db.collection('users').where('username', '==', username).get();
-            if(!snapshot.empty) return showError('reg-error', "Usuario ya usado.");
-            const userCred = await auth.createUserWithEmailAndPassword(email, password);
-            await db.collection('users').doc(userCred.user.uid).set({
-                username: username,
-                isVerified: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } catch(e) { showError('reg-error', "Error al registrar."); }
+      const username = document.getElementById('reg-username').value.trim().toLowerCase();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const errorEl = document.getElementById('reg-error');
+      errorEl.classList.add('hidden');
+
+      if (!username || !email || !password) return showError('reg-error', "Todos los campos son obligatorios");
+      if (password.length < 6) return showError('reg-error', "La contraseña debe tener al menos 6 caracteres");
+
+      try {
+        console.log("🔄 Creando cuenta...");
+        const userCred = await auth.createUserWithEmailAndPassword(email, password);
+        console.log("✅ Usuario Auth creado:", userCred.user.uid);
+
+        await db.collection('users').doc(userCred.user.uid).set({
+          username: username,
+          isVerified: false,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        console.log("✅ Registro completado");
+        showError('reg-error', "¡Cuenta creada! Iniciando sesión...");
+        errorEl.style.color = "#22c55e";
+      } catch (error) {
+        console.error("❌ Error:", error.code, error.message);
+        let msg = "Error al registrar";
+        if (error.code === 'auth/email-already-in-use') msg = "Este correo ya está registrado";
+        else if (error.code === 'auth/invalid-email') msg = "El correo no es válido";
+        else if (error.code === 'auth/weak-password') msg = "Contraseña demasiado débil";
+        showError('reg-error', msg);
+      }
     }
 
     function logout() { auth.signOut(); window.location.reload(); }
@@ -428,7 +413,7 @@
 
     function closeModal() { document.getElementById('thread-modal').classList.add('hidden'); }
 
-    // Auth State + Notificaciones
+    // Auth State
     auth.onAuthStateChanged(async (user) => {
       currentUser = user;
       const nav = document.getElementById('nav-user');
@@ -442,18 +427,16 @@
         
         authScreen.classList.add('hidden');
         mainApp.classList.remove('hidden');
-        
         nav.innerHTML = `<button onclick="logout()" class="text-xs font-bold text-zinc-500 hover:text-white border border-zinc-800 px-3 py-1 rounded-full">Salir</button>`;
         
         listenThreads();
-        requestNotificationPermission();   // ← Activa notificaciones
+        requestNotificationPermission();
       } else {
         mainApp.classList.add('hidden');
         authScreen.classList.remove('hidden');
         authScreen.classList.add('flex');
         nav.innerHTML = '';
       }
-
       appContainer.classList.add('visible');
     });
   </script>
